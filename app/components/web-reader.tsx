@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { BookOpen, Eraser, ClipboardPaste, FileText, Upload, Globe } from "lucide-react"
 import { WordPopover } from "@/components/word-popover"
 
-const API_URL = "http://127.0.0.1:3001/analisar";
+const API_URL = "https://ai-reader-n8xz.onrender.com/analisar";
 
 const LANGUAGES = [
   { code: "pt", name: "Portuguese" },
