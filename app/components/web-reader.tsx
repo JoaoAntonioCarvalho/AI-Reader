@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
-import { BookOpen, Eraser, ClipboardPaste, FileText, Upload, Globe } from "lucide-react"
+import { BookOpen, Eraser, ClipboardPaste, FileText, Globe } from "lucide-react"
 import { WordPopover } from "@/components/word-popover"
 
 const API_URL = "https://ai-reader-n8xz.onrender.com/analisar";
@@ -80,7 +80,7 @@ export function WebReader() {
         body: JSON.stringify({
           word,
           sentence: contextSentence,
-          language: targetLang // Enviando o idioma selecionado
+          language: targetLang
         }),
       });
 
@@ -97,18 +97,22 @@ export function WebReader() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur shadow-sm">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3">
-              <BookOpen className="h-6 w-6 text-primary" />
-              <h1 className="text-xl font-semibold tracking-tight">Web Reader</h1>
-            </div>
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-2">
 
-            {/* Seletor de Idioma */}
-            <div className="hidden md:flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full border">
-              <Globe className="h-4 w-4 text-muted-foreground" />
+          {/* Logo e Título */}
+          <div className="flex items-center gap-2 min-w-0">
+            <BookOpen className="h-6 w-6 text-primary shrink-0" />
+            <h1 className="text-lg font-bold tracking-tight truncate hidden xs:block">
+              Web Reader
+            </h1>
+          </div>
+
+          {/* Controles: Seletor e Botão New */}
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-1.5 bg-muted/50 px-2 py-1.5 rounded-full border border-border/60">
+              <Globe className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
               <select
-                className="bg-transparent text-sm font-medium focus:outline-none cursor-pointer"
+                className="bg-transparent text-xs font-bold focus:outline-none cursor-pointer pr-1"
                 value={targetLang}
                 onChange={(e) => setTargetLang(e.target.value)}
               >
@@ -117,17 +121,23 @@ export function WebReader() {
                 ))}
               </select>
             </div>
-          </div>
 
-          {!isEditing && (
-            <Button variant="ghost" size="sm" onClick={() => { setText(""); setInputText("") }} className="gap-2">
-              <Eraser className="h-4 w-4" /> New Text
-            </Button>
-          )}
+            {!isEditing && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => { setText(""); setInputText("") }}
+                className="h-9 px-2 sm:px-3 text-xs gap-1.5 hover:bg-destructive/10 hover:text-destructive"
+              >
+                <Eraser className="h-4 w-4" />
+                <span className="hidden sm:inline">New Text</span>
+              </Button>
+            )}
+          </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 flex justify-center">
+      <main className="container mx-auto px-4 py-6 flex justify-center">
         <div className="w-full max-w-4xl">
           {isEditing ? (
             <Card className="p-6 space-y-4 shadow-xl border-dashed border-2">
@@ -136,12 +146,12 @@ export function WebReader() {
                   <ClipboardPaste className="h-8 w-8 text-primary" />
                 </div>
                 <h2 className="text-2xl font-bold">Reader Mode</h2>
-                <p className="text-muted-foreground mt-1">Select your language and paste text</p>
+                <p className="text-muted-foreground mt-1">Paste your text and click on any word</p>
               </div>
 
               <Textarea
-                placeholder="Paste english text here..."
-                className="min-h-[300px] text-lg p-4 resize-none leading-relaxed"
+                placeholder="Paste English text here..."
+                className="min-h-[300px] text-base sm:text-lg p-4 resize-none leading-relaxed"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
               />
@@ -151,14 +161,14 @@ export function WebReader() {
               </Button>
             </Card>
           ) : (
-            <Card className="p-6 sm:p-10 shadow-lg border-border/40">
+            <Card className="p-6 sm:p-10 shadow-lg border-border/40 min-h-[60vh]">
               <article className="prose prose-slate prose-lg max-w-none font-serif leading-relaxed whitespace-pre-wrap">
                 {text.split("\n").map((paragraph, pIndex) => (
-                  <p key={pIndex} className="mb-4">
+                  <p key={pIndex} className="mb-4 text-lg sm:text-xl">
                     {paragraph.split(/\s+/).map((word, wIndex) => (
                       <span
                         key={wIndex}
-                        className="cursor-pointer hover:text-primary transition-colors inline-block"
+                        className="cursor-pointer hover:bg-primary/10 hover:text-primary rounded px-0.5 transition-all inline-block"
                         onClick={handleWordClick}
                       >
                         {word}{" "}
